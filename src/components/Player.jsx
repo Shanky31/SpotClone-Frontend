@@ -29,8 +29,8 @@ export default function Player({ currentSong }) {
       <audio ref={audioRef} src={currentSong.uri || currentSong.audioUrl} onEnded={() => setIsPlaying(false)} />
       
       <div className="flex items-center gap-4" style={{width: '30%'}}>
-        {currentSong.coverUrl ? (
-          <img src={currentSong.coverUrl} alt="Cover" style={{width: 56, height: 56, borderRadius: 4, objectFit: 'cover'}} />
+        {currentSong.thumbnailImage ? (
+          <img src={currentSong.thumbnailImage} alt="Cover" style={{width: 56, height: 56, borderRadius: 4, objectFit: 'cover'}} />
         ) : (
           <div style={{width: 56, height: 56, backgroundColor: '#27272a', borderRadius: 4}} />
         )}

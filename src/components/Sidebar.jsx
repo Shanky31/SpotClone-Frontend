@@ -34,10 +34,12 @@ export default function Sidebar() {
       </nav>
 
       <div style={{marginTop: 'auto'}}>
-        <button className="nav-link" onClick={handleLogout} style={{width: '100%', outline: 'none'}}>
-          <LogOut size={20} />
-          <span>Log out</span>
-        </button>
+        {user && (
+          <button className="nav-link" onClick={handleLogout} style={{width: '100%', outline: 'none'}}>
+            <LogOut size={20} />
+            <span>Log out</span>
+          </button>
+        )}
       </div>
     </aside>
   );

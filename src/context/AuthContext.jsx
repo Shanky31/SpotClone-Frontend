@@ -10,15 +10,13 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Basic verification: in a complete app you'd hit /api/auth/me or decode token
-    const token = localStorage.getItem('token');
+    // Basic verification: backend handles token via cookies
     const storedUser = localStorage.getItem('user');
 
-    if (token && storedUser) {
+    if (storedUser) {
       try {
         setUser(JSON.parse(storedUser));
       } catch (err) {
-        localStorage.removeItem('token');
         localStorage.removeItem('user');
       }
     }
@@ -30,12 +28,8 @@ export const AuthProvider = ({ children }) => {
       // Endpoint is /api/auth/login
       const res = await api.post('/auth/login', { email, password });
       
-      // Assume backend returns { token: '...', user: { _id, username, role, ... } }
-      // Or sets a cookie. If it sets token in res.data.token:
-      const token = res.data.token || res.data.accessToken; 
       const userData = res.data.user || res.data; // fallback if user obj is entire response minus token
 
-      if (token) localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(userData));
       
       setUser(userData);
@@ -56,10 +50,15 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setUser(null);
+  const logout = async () => {
+    try {
+      await api.post('/auth/logout');
+    } catch (err) {
+      console.error('Logout error', err);
+    } finally {
+      localStorage.removeItem('user');
+      setUser(null);
+    }
   };
 
   return (

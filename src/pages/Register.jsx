@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Register() {
-  const [username, setUsername] = useState('');
+  const [userName, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('user'); // default is user, can be artist
@@ -15,7 +15,7 @@ export default function Register() {
     e.preventDefault();
     setError('');
     try {
-      await register({ username, email, password, role });
+      await register({ userName, email, password, role });
       navigate('/login');
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to register');
@@ -29,12 +29,12 @@ export default function Register() {
         {error && <p className="text-danger" style={{marginBottom: 16, textAlign: 'center'}}>{error}</p>}
         <form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column', gap: 16}}>
           <div>
-            <label style={{display: 'block', marginBottom: 8, color: 'var(--text-secondary)'}}>Username</label>
+            <label style={{display: 'block', marginBottom: 8, color: 'var(--text-secondary)'}}>User Name</label>
             <input 
               type="text" 
               className="input-field" 
-              placeholder="Username" 
-              value={username}
+              placeholder="User Name" 
+              value={userName}
               onChange={(e) => setUsername(e.target.value)}
               required 
             />

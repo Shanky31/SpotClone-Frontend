@@ -31,6 +31,9 @@ export const AuthProvider = ({ children }) => {
       const userData = res.data.user || res.data; // fallback if user obj is entire response minus token
 
       localStorage.setItem('user', JSON.stringify(userData));
+      if (res.data.token) {
+        localStorage.setItem('token', res.data.token);
+      }
       
       setUser(userData);
       return userData;
@@ -57,6 +60,7 @@ export const AuthProvider = ({ children }) => {
       console.error('Logout error', err);
     } finally {
       localStorage.removeItem('user');
+      localStorage.removeItem('token');
       setUser(null);
     }
   };

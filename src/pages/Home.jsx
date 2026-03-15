@@ -1,7 +1,14 @@
 import { Play } from 'lucide-react';
 
+const CardSkeleton = () => (
+  <div className="card">
+    <div className="skeleton" style={{ width: '100%', aspectRatio: '1/1' }}></div>
+    <div className="skeleton" style={{ width: '70%', height: '20px', marginTop: '12px' }}></div>
+    <div className="skeleton" style={{ width: '40%', height: '14px', marginTop: '8px' }}></div>
+  </div>
+);
+
 export default function Home({ setCurrentSong, musics, loading, error }) {
-  if (loading) return <div className="text-gray flex justify-center mt-12">Loading music...</div>;
   if (error) return <div className="text-danger flex justify-center mt-12">{error}</div>;
 
   return (
@@ -9,20 +16,23 @@ export default function Home({ setCurrentSong, musics, loading, error }) {
       <h1 className="h1">Listen Now</h1>
       <p className="text-secondary mb-8">Discover top tracks tailored for you.</p>
 
-      {musics.length === 0 ? (
-        <div className="glass-panel" style={{padding: 48, textAlign: 'center'}}>
-          <p className="text-secondary">No music available at the moment.</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-auto gap-4">
-          {musics.map((music) => (
+      <div className="grid grid-cols-auto gap-4">
+        {loading ? (
+          // Render 8 skeletons while loading
+          Array(8).fill(0).map((_, i) => <CardSkeleton key={i} />)
+        ) : musics.length === 0 ? (
+          <div className="glass-panel" style={{ padding: 48, textAlign: 'center', gridColumn: '1 / -1' }}>
+            <p className="text-secondary">No music available at the moment.</p>
+          </div>
+        ) : (
+          musics.map((music) => (
             <div 
               key={music._id || music.id} 
               className="card group"
               onClick={() => setCurrentSong(music)}
             >
-              <div style={{position: 'relative'}}>
-                  <img src={music.thumbnailImage || music.coverUrl || music.image || "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} alt={music.name || music.title} style={{width: '100%', aspectRatio: '1/1', objectFit: 'cover', borderRadius: 4}} />
+              <div style={{ position: 'relative' }}>
+                  <img src={music.thumbnailImage || music.coverUrl || music.image || "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} alt={music.name || music.title} style={{ width: '100%', aspectRatio: '1/1', objectFit: 'cover', borderRadius: 4 }} />
                 <div style={{
                   position: 'absolute', bottom: 8, right: 8, 
                   backgroundColor: 'var(--accent)', color: '#000', 
@@ -33,11 +43,11 @@ export default function Home({ setCurrentSong, musics, loading, error }) {
                 }}
                 className="group-hover:opacity-100 group-hover:translate-y-0"
                 >
-                  <Play size={20} style={{marginLeft: 2, pointerEvents: 'none'}} />
+                  <Play size={20} style={{ marginLeft: 2, pointerEvents: 'none' }} />
                 </div>
               </div>
               <div>
-                <h3 className="font-semibold text-primary truncate" style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
+                <h3 className="font-semibold text-primary truncate" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {music.name || music.title}
                 </h3>
                 <p className="text-sm text-secondary truncate">
@@ -45,9 +55,9 @@ export default function Home({ setCurrentSong, musics, loading, error }) {
                 </p>
               </div>
             </div>
-          ))}
-        </div>
-      )}
+          ))
+        )}
+      </div>
     </div>
   );
 }

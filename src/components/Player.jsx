@@ -41,7 +41,7 @@ export default function Player({ currentSong }) {
 
   const toggleLike = async () => {
     if (!user) {
-       alert("Please login to like this song");
+       toast.error("Please login to like this song");
        return;
     }
     try {

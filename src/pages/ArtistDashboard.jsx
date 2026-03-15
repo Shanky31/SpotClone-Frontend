@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import api from '../api/axios';
 import { UploadCloud, CheckCircle, AlertCircle, ImageIcon } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 export default function ArtistDashboard() {
   const [file, setFile] = useState(null);
@@ -49,7 +50,7 @@ export default function ArtistDashboard() {
           'Content-Type': 'multipart/form-data'
         }
       });
-      
+      toast.success('Music uploaded successfully!');
       setMessage('Music uploaded successfully!');
       setFile(null);
       setThumbnail(null);
@@ -57,6 +58,7 @@ export default function ArtistDashboard() {
       setName('');
     } catch (err) {
       console.error(err);
+      toast.error(err.response?.data?.message || 'Failed to upload music');
       setError(err.response?.data?.message || 'Failed to upload music');
     } finally {
       setLoading(false);

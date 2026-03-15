@@ -1,28 +1,6 @@
-import { useEffect, useState } from 'react';
-import api from '../api/axios';
 import { Play } from 'lucide-react';
 
-export default function Home({ setCurrentSong }) {
-  const [musics, setMusics] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchMusic = async () => {
-      try {
-        // Backend route for getting all music can be accessed by anyone (even user)
-        const res = await api.get('/music');
-        setMusics(res.data.list || res.data.musics || []);
-      } catch (err) {
-        setError('Failed to fetch music');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchMusic();
-  }, []);
-
+export default function Home({ setCurrentSong, musics, loading, error }) {
   if (loading) return <div className="text-gray flex justify-center mt-12">Loading music...</div>;
   if (error) return <div className="text-danger flex justify-center mt-12">{error}</div>;
 
@@ -44,14 +22,7 @@ export default function Home({ setCurrentSong }) {
               onClick={() => setCurrentSong(music)}
             >
               <div style={{position: 'relative'}}>
-                {music.thumbnailImage || music.coverUrl || music.image ? (
-                  <img src={music.thumbnailImage || music.coverUrl || music.image} alt={music.name || music.title} style={{width: '100%', aspectRatio: '1/1', objectFit: 'cover', borderRadius: 4}} />
-                ) : (
-                  <div style={{width: '100%', aspectRatio: '1/1', backgroundColor: '#3f3f46', borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                    <span className="text-gray text-sm">No Cover</span>
-                  </div>
-                )}
-                {/* Play Button Overlay */}
+                  <img src={music.thumbnailImage || music.coverUrl || music.image || "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} alt={music.name || music.title} style={{width: '100%', aspectRatio: '1/1', objectFit: 'cover', borderRadius: 4}} />
                 <div style={{
                   position: 'absolute', bottom: 8, right: 8, 
                   backgroundColor: 'var(--accent)', color: '#000', 
@@ -70,7 +41,7 @@ export default function Home({ setCurrentSong }) {
                   {music.name || music.title}
                 </h3>
                 <p className="text-sm text-secondary truncate">
-                  {music.artist?.username || music.artistName || 'Unknown Artist'}
+                  {music.artist?.userName || music.artistName || 'Unknown Artist'}
                 </p>
               </div>
             </div>

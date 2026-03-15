@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Music, LogOut, UploadCloud } from 'lucide-react';
+import { Home, Music, LogOut, UploadCloud, Heart } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function Sidebar() {
@@ -25,6 +25,12 @@ export default function Sidebar() {
           <Home size={20} />
           <span>Home</span>
         </Link>
+        {user && (
+          <Link to="/liked-songs" className={`nav-link ${location.pathname === '/liked-songs' ? 'active' : ''}`}>
+            <Heart size={20} />
+            <span>Liked Songs</span>
+          </Link>
+        )}
         {user?.role === 'artist' && (
           <Link to="/artist" className={`nav-link ${location.pathname === '/artist' ? 'active' : ''}`}>
             <UploadCloud size={20} />

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -14,6 +15,7 @@ export default function Login() {
     setError('');
     try {
       await login(email, password);
+      toast.success("Login successful");
       navigate('/');
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to login');
